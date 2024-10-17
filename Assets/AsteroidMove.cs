@@ -7,11 +7,15 @@ public class AsteroidMove : MonoBehaviour
     public int rotz;
     public int mx, my;
     private Rigidbody2D myRigid;
+    private ParticleSystem myPart;
+    public float startTime = 0f;
  
     void Start()
     {
-      
+        //initialize variables
+        startTime = Time.timeSinceLevelLoad;
         myRigid = this.GetComponent<Rigidbody2D>();
+        myPart = this.GetComponent<ParticleSystem>();
 
         this.transform.Rotate(new Vector3(0, 0, rotz));
 
@@ -23,6 +27,22 @@ public class AsteroidMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (startTime + 1f < Time.timeSinceLevelLoad)
+        {
+            myPart.Play();
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (startTime + 1f < Time.timeSinceLevelLoad)
+        {
+            myPart.Stop();
+        }
     }
 
 }
